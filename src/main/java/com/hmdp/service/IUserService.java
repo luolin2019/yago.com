@@ -2,6 +2,7 @@ package com.hmdp.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hmdp.dto.LoginFormDTO;
+import com.hmdp.dto.LoginPwdDTO;
 import com.hmdp.dto.Result;
 import com.hmdp.entity.User;
 
@@ -28,4 +29,7 @@ public interface IUserService extends IService<User> {
     Result signCount();
 
     Result logout(HttpServletRequest request);
+
+
+//    Result loginpwd(LoginPwdDTO loginpwd, HttpSession session);
 }

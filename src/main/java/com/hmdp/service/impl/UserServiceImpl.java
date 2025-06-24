@@ -3,9 +3,9 @@ package com.hmdp.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hmdp.dto.LoginFormDTO;
+import com.hmdp.dto.LoginPwdDTO;
 import com.hmdp.dto.Result;
 import com.hmdp.dto.UserDTO;
 import com.hmdp.entity.User;
@@ -14,9 +14,7 @@ import com.hmdp.service.IUserService;
 import com.hmdp.utils.RegexUtils;
 import com.hmdp.utils.UserHolder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
-import org.springframework.data.redis.connection.RedisServer;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -114,6 +112,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return Result.ok(token);
     }
 
+
     private User createUserWithPhone(String phone) {
         //1.创建用户
         User user = new User();
@@ -188,6 +187,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String name = UserHolder.getUser().getNickName();
         // 2.获取日期
         LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formatNow = now.format(format);
         //3.获取请求头中的token
         String token = request.getHeader("authorization");
         //4.拼接对应redis中token的位置login：token：xxxxx
@@ -195,10 +196,55 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         //4.删除redis中的token
         stringRedisTemplate.delete(tokenKey);
 
-        log.info(now+" 用户: {"+name+"} 退出成功！");
+        log.info(formatNow+" 用户: {"+name+"} 退出成功！");
         UserHolder.removeUser();
         return Result.ok();
     }
+
+/*    @Override
+    public Result loginpwd(LoginPwdDTO loginpwd, HttpSession session) {
+        //  实现登录功能2
+        String phone=loginpwd.getPhone();
+        String pwd=loginpwd.getPassword();
+
+        User user=query().eq("phone",phone).one();
+        if (RegexUtils.isPhoneInvalid(phone)){
+            //2.不符合，返回错误信息
+            return Result.fail("手机号格式错误!");
+        }
+        if(user==null){
+            return Result.fail("用户不存在，请使用验证码登录注册！");
+        }
+        if(!user.getPassword().equals(pwd)){
+            return Result.fail("密码错误，请重新输入！");
+        }
+        //5.判断用户是否存在
+        if (user==null){
+            //6.不存在，创建新用户并保存
+            user=createUserWithPhone(phone);
+        }
+        // Save user info to session
+        session.setAttribute("user", user);
+
+        //7.保存用户信息到redis中
+        // 7.1.随机生成token，作为登录令牌
+        String token = UUID.randomUUID().toString();
+        // 7.2.将User对象转为Hash存储
+        UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
+        Map<String, Object> userMap = BeanUtil.beanToMap(userDTO,new HashMap<>(),
+                CopyOptions.create()
+                        .setIgnoreNullValue(true)
+                        .setFieldValueEditor(
+                                (fieldName,fieldValue) -> fieldValue.toString()));
+        // 7.3.存储
+        String tokenKey = LOGIN_USER_KEY + token;
+        stringRedisTemplate.opsForHash().putAll(tokenKey,userMap);
+        //7.4.设置token有效期
+        stringRedisTemplate.expire(tokenKey,LOGIN_USER_TTL,TimeUnit.MINUTES);
+        // 8.返回token
+        return Result.ok(token);
+
+    }*/
 
 
 }
