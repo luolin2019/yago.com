@@ -4,21 +4,21 @@
 通过这个平台，用户可以浏览、搜索和比较各种商家的信息，包括美食、KTV等等。用户可以在平台上创建个人账
 号、关注他人、发表评论、点赞、上传图片和发布自己的博客。
 
-#### 软件架构
-软件架构说明
+![image](https://github.com/user-attachments/assets/e1b44dc7-c69e-4bbb-9140-e37ccbd202b7)
+![image](https://github.com/user-attachments/assets/0885d384-3838-464d-ab64-7965c85f1741)
+![image](https://github.com/user-attachments/assets/54de6483-8163-4fcb-974d-e347f352507c)
+![image](https://github.com/user-attachments/assets/91dd6668-9ccc-454e-8195-593eae7bda6e)
+![image](https://github.com/user-attachments/assets/1e7471b1-7284-4abd-b866-1b11109b3c75)
+![image](https://github.com/user-attachments/assets/17be4a2d-f87a-4d88-bc11-a22276c2ceaf)
+![image](https://github.com/user-attachments/assets/65adaea5-dcf6-424a-a329-21101e7e729c)
 
 
-#### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+拆袋即食
 
 #### 参与贡献
 
